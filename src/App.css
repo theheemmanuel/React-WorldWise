@@ -1,0 +1,20 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.hero {
+  background-image: url(./assets/bg.jpg);
+  background: linear-gradient(
+      330.24deg,
+      rgba(196, 208, 214, 0.5) 57.27%,
+      rgba(151, 159, 162, 0.47) 103.22%
+    ),
+    url(./assets/bg.jpg);
+  background-size: cover;
+  min-height: 100vh;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin: o;
+}

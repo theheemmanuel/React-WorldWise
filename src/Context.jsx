@@ -1,0 +1,52 @@
+/* eslint-disable react/prop-types */
+import { createContext, useEffect, useReducer } from "react";
+import Reducer from "./Reducer";
+
+export const ContextPost = createContext();
+
+export function PostContextProvider({ children }) {
+  const InitialState = { loading: false, city: [], currentCity: {} };
+  const [state, dispatch] = useReducer(Reducer, InitialState);
+  useEffect(() => {
+    const fetchCity = async () => {
+      dispatch({ type: "loading", payload: true });
+      try {
+        const response = await fetch("http://localhost:4000/cities", {
+          headers: {
+            accept: "application/json",
+          },
+        });
+        const resJon = await response.json();
+        dispatch({ type: "city", payload: resJon });
+        dispatch({ type: "loading", payload: false });
+      } catch (error) {
+        console.log(error);
+        dispatch({ type: "loading", payload: false });
+      }
+    };
+    fetchCity();
+  }, []);
+
+  const getCity = async (id) => {
+    dispatch({ type: "loading", payload: true });
+    try {
+      const response = await fetch(`http://localhost:4000/cities/${id}`, {
+        headers: {
+          accept: "application/json",
+        },
+      });
+      const resJon = await response.json();
+      dispatch({ type: "getCity", payload: resJon });
+      dispatch({ type: "loading", payload: false });
+    } catch (error) {
+      console.log(error);
+      dispatch({ type: "loading", payload: false });
+    }
+  };
+
+  return (
+    <ContextPost.Provider value={{ state, getCity }}>
+      {children}
+    </ContextPost.Provider>
+  );
+}
