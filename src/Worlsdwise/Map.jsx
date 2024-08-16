@@ -9,6 +9,7 @@ import {
 } from "react-leaflet";
 import { useContext, useEffect, useState } from "react";
 import { ContextPost } from "../Context";
+import useGeolocation from "../useGeolocation";
 
 const Map = () => {
   const [searchParams] = useSearchParams();
@@ -22,8 +23,21 @@ const Map = () => {
       setPosition([maplat, maplng]);
     }
   }, [maplat, maplng]);
+
+  const { isLoading, getPosition, position: geoposition } = useGeolocation();
+  useEffect(() => {
+    if (geoposition) {
+      setPosition([geoposition.lat, geoposition.lng]);
+    }
+  }, [geoposition]);
   return (
     <div className="w-1/2 min-h-[70vh] bg-gray-600 text-white">
+      <button
+        className="absolute bottom-0 z-1 bg-green-500 right-8 px-6 py-2 rounded-xl"
+        onClick={getPosition}
+      >
+        {isLoading ? "Loading..." : "Use position"}
+      </button>
       <MapContainer
         className="h-full w-full"
         center={position}
@@ -53,7 +67,6 @@ const Map = () => {
         <Changecenter position={position} />
         <DetectClick />
       </MapContainer>
-      ,
     </div>
   );
 };
