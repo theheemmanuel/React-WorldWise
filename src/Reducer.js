@@ -6,11 +6,11 @@ export default function Reducer(state, action) {
     case "loading":
       return { ...state, loading: action.payload };
     case "getCity":
-      return { ...state, currentCity: action.payload };
+      return { ...state, currentCity: action.payload, loading: false };
     case "addCity":
-      return { ...state, city: action.payload };
+      return { ...state, city: action.payload, loading: false };
     case "deleteCity":
-      return { ...state, city: action.payload };
+      return { ...state, city: action.payload, loading: false };
   }
   // if (action.type === "city") {
   //   return action.payload;

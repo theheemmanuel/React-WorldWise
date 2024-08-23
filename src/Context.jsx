@@ -18,7 +18,6 @@ export function PostContextProvider({ children }) {
         });
         const resJon = await response.json();
         dispatch({ type: "city", payload: resJon });
-        dispatch({ type: "loading", payload: false });
       } catch (error) {
         console.log(error);
         dispatch({ type: "loading", payload: false });
@@ -37,7 +36,6 @@ export function PostContextProvider({ children }) {
       });
       const resJon = await response.json();
       dispatch({ type: "getCity", payload: resJon });
-      dispatch({ type: "loading", payload: false });
     } catch (error) {
       console.log(error);
       dispatch({ type: "loading", payload: false });
@@ -56,7 +54,6 @@ export function PostContextProvider({ children }) {
       });
       const resJon = await response.json();
       dispatch({ type: "addCity", payload: [...state.city, resJon] });
-      dispatch({ type: "loading", payload: false });
     } catch (error) {
       console.log(error);
       dispatch({ type: "loading", payload: false });
@@ -75,9 +72,6 @@ export function PostContextProvider({ children }) {
         type: "deleteCity",
         payload: state.city.filter((city) => city.id !== id),
       });
-      dispatch({ type: "loading", payload: false });
-
-      dispatch({ type: "loading", payload: false });
     } catch (error) {
       console.log(error);
       dispatch({ type: "loading", payload: false });
