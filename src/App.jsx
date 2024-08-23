@@ -15,8 +15,6 @@ import { ContextPost } from "./Context";
 
 function App() {
   const { state } = useContext(ContextPost);
-
-  console.log(state.city);
   const Router = createBrowserRouter([
     {
       path: "/",
@@ -40,9 +38,7 @@ function App() {
         },
         {
           path: "countries",
-          element: (
-            <CountryList/>
-          ),
+          element: <CountryList />,
         },
         {
           path: "form",

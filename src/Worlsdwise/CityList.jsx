@@ -10,7 +10,7 @@ const formatDate = (date) =>
   }).format(new Date(date));
 
 const CityList = () => {
-  const { state } = useContext(ContextPost);
+  const { state, deleteCity } = useContext(ContextPost);
   if (state.isLoading) return <h1>Loading...</h1>;
   if (!state.city.length)
     return <h1>Add your first city by clicking on a city on the map</h1>;
@@ -34,7 +34,13 @@ const CityList = () => {
                 <h2 className="font-bold">{city.cityName}</h2>
                 <p>{formatDate(city.date)}</p>
               </div>
-              <button className="hover:bg-green-500 px-2 rounded-full bg-gray-800">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  deleteCity(city.id);
+                }}
+                className="hover:bg-green-500 px-2 rounded-full bg-gray-800"
+              >
                 &times;
               </button>
             </li>

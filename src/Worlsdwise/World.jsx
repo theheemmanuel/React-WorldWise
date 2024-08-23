@@ -1,13 +1,6 @@
 import { Link } from "react-router-dom";
 
 const World = () => {
-  const Body = {
-    id: 1,
-    name: "Emmanuel",
-    age: 22,
-    school: "Adeleke University",
-  };
-  console.log(Body);
   return (
     <div className="hero">
       <div className="text-center w-2/3 md:mx-auto">

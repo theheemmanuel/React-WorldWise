@@ -4,7 +4,10 @@ import { useContext, useEffect, useState } from "react";
 import { ContextPost } from "../Context";
 import useURLLocation from "../useURLLocation";
 import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
+// convertToEmoji.js
 export function convertToEmoji(countryCode) {
   const codePoints = countryCode
     .toUpperCase()
@@ -24,6 +27,8 @@ function Form() {
   const [loading, setLoading] = useState(false);
   const [emoji, setemoji] = useState("");
 
+  const { addCity } = useContext(ContextPost);
+
   useEffect(() => {
     if (!maplat || !maplng) return;
     const fetchName = async () => {
@@ -33,7 +38,6 @@ function Form() {
           `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${maplat}&longitude=${maplng}`
         );
         const data = await response.json();
-        console.log(data);
         setCityName(data.city || data.locality);
         setCountry(data.countryName);
         setLoading(false);
@@ -64,8 +68,28 @@ function Form() {
     );
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const NewCity = {
+      cityName,
+      country,
+      date,
+      notes,
+      emoji,
+      position: {
+        lat: maplat,
+        lng: maplng,
+      },
+    };
+    addCity(NewCity);
+    navigate("/app");
+  };
+
   return (
-    <form className=" bg-gray-700 p-4 rounded-xl text-left">
+    <form
+      className=" bg-gray-700 p-4 rounded-xl text-left"
+      onSubmit={handleSubmit}
+    >
       <div className="relative">
         <label htmlFor="cityName">City name</label>
         <input
@@ -77,14 +101,16 @@ function Form() {
         <span className="absolute right-2 top-6 text-3xl">{emoji}</span>
       </div>
 
-      <div className="mt-3">
+      <div className="mt-3 w-full">
         <label htmlFor="date">When did you go to {cityName}?</label>
-        <input
-          className="block w-full rounded-lg p-1 text-black"
-          id="date"
-          onChange={(e) => setDate(e.target.value)}
-          value={date}
-        />
+        <div className="text-black w-full!important">
+          <DatePicker
+            id="date"
+            selected={date}
+            onChange={(date) => setDate(date)}
+            className="block w-full rounded-lg p-1 text-black"
+          />
+        </div>
       </div>
 
       <div className="mt-3">
@@ -98,8 +124,15 @@ function Form() {
       </div>
 
       <div className="flex justify-between mt-4">
-        <button>Add</button>
-        <button onClick={() => navigate(-1)}>&larr; Back</button>
+        <button type="submit">Add</button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(-1);
+          }}
+        >
+          &larr; Back
+        </button>
       </div>
     </form>
   );

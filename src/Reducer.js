@@ -1,5 +1,5 @@
 export default function Reducer(state, action) {
-  console.log(state, action);
+  // console.log(state, action);
   switch (action.type) {
     case "city":
       return { ...state, city: action.payload };
@@ -7,6 +7,10 @@ export default function Reducer(state, action) {
       return { ...state, loading: action.payload };
     case "getCity":
       return { ...state, currentCity: action.payload };
+    case "addCity":
+      return { ...state, city: action.payload };
+    case "deleteCity":
+      return { ...state, city: action.payload };
   }
   // if (action.type === "city") {
   //   return action.payload;

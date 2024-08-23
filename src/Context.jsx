@@ -44,8 +44,48 @@ export function PostContextProvider({ children }) {
     }
   };
 
+  const addCity = async (city) => {
+    dispatch({ type: "loading", payload: true });
+    try {
+      const response = await fetch("http://localhost:4000/cities", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(city),
+      });
+      const resJon = await response.json();
+      dispatch({ type: "addCity", payload: [...state.city, resJon] });
+      dispatch({ type: "loading", payload: false });
+    } catch (error) {
+      console.log(error);
+      dispatch({ type: "loading", payload: false });
+    }
+  };
+
+  const deleteCity = async (id) => {
+    dispatch({ type: "loading", payload: true });
+    try {
+      const response = await fetch(`http://localhost:4000/cities/${id}`, {
+        method: "DELETE",
+      });
+      const resJon = await response.json();
+      console.log(resJon);
+      dispatch({
+        type: "deleteCity",
+        payload: state.city.filter((city) => city.id !== id),
+      });
+      dispatch({ type: "loading", payload: false });
+
+      dispatch({ type: "loading", payload: false });
+    } catch (error) {
+      console.log(error);
+      dispatch({ type: "loading", payload: false });
+    }
+  };
+
   return (
-    <ContextPost.Provider value={{ state, getCity }}>
+    <ContextPost.Provider value={{ state, getCity, addCity, deleteCity }}>
       {children}
     </ContextPost.Provider>
   );

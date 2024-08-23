@@ -8,7 +8,6 @@ const CountryList = () => {
       return [...arr, { country: city.country, emoji: city.emoji }];
     else return arr;
   }, []);
-  console.log(countries);
   if (state.isLoading) return <h1>Loading...</h1>;
   if (!state.city.length)
     return <h1>Add your first city by clicking on a city on the map</h1>;
