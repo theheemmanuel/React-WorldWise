@@ -1,7 +1,9 @@
 "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0";
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ContextPost } from "../Context";
+import useURLLocation from "../useURLLocation";
+import { useNavigate } from "react-router-dom";
 
 export function convertToEmoji(countryCode) {
   const codePoints = countryCode
@@ -12,16 +14,59 @@ export function convertToEmoji(countryCode) {
 }
 
 function Form() {
+  const navigate = useNavigate();
+  const { maplat, maplng } = useURLLocation();
+
   const [cityName, setCityName] = useState("");
   const [country, setCountry] = useState("");
   const [date, setDate] = useState(new Date());
   const [notes, setNotes] = useState("");
-  const x = useContext(ContextPost);
-  console.log(x);
+  const [loading, setLoading] = useState(false);
+  const [emoji, setemoji] = useState("");
+
+  useEffect(() => {
+    if (!maplat || !maplng) return;
+    const fetchName = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${maplat}&longitude=${maplng}`
+        );
+        const data = await response.json();
+        console.log(data);
+        setCityName(data.city || data.locality);
+        setCountry(data.countryName);
+        setLoading(false);
+        setemoji(convertToEmoji(data.countryCode));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchName();
+  }, [maplat, maplng]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if ((!maplat, !maplng)) {
+    return (
+      <span className="font-bold mb-6 text-zinc-300">
+        Start by clicking somewhere on the map! 📍
+      </span>
+    );
+  }
+
+  if (country === "") {
+    return (
+      <span className="font-bold mb-6 text-zinc-300">
+        That doesn&apos;t seem to be a city. Click somewhere else
+      </span>
+    );
+  }
 
   return (
     <form className=" bg-gray-700 p-4 rounded-xl text-left">
-      <div className="">
+      <div className="relative">
         <label htmlFor="cityName">City name</label>
         <input
           className="block w-full rounded-lg p-1 text-black"
@@ -29,7 +74,7 @@ function Form() {
           onChange={(e) => setCityName(e.target.value)}
           value={cityName}
         />
-        {/* <span className={flag}>{emoji}</span> */}
+        <span className="absolute right-2 top-6 text-3xl">{emoji}</span>
       </div>
 
       <div className="mt-3">
@@ -54,7 +99,7 @@ function Form() {
 
       <div className="flex justify-between mt-4">
         <button>Add</button>
-        <button>&larr; Back</button>
+        <button onClick={() => navigate(-1)}>&larr; Back</button>
       </div>
     </form>
   );

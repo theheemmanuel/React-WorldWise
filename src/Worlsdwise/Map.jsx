@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   MapContainer,
   Marker,
@@ -10,11 +10,11 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { ContextPost } from "../Context";
 import useGeolocation from "../useGeolocation";
+import useURLLocation from "../useURLLocation";
 
 const Map = () => {
-  const [searchParams] = useSearchParams();
-  const maplat = searchParams.get("lat");
-  const maplng = searchParams.get("lng");
+  const { maplat, maplng } = useURLLocation();
+
   const { state } = useContext(ContextPost);
   const [position, setPosition] = useState([8.96596, 7.45433]);
 
@@ -59,11 +59,7 @@ const Map = () => {
             </Popup>
           </Marker>
         ))}
-        {/* <Marker position={position}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker> */}
+
         <Changecenter position={position} />
         <DetectClick />
       </MapContainer>
