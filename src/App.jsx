@@ -12,6 +12,8 @@ import City from "./Worlsdwise/City";
 import Form from "./Worlsdwise/Form";
 import { useContext } from "react";
 import { ContextPost } from "./Context";
+import Login from "./Worlsdwise/Login";
+import ProtectedRoute from "./Worlsdwise/ProtectedRoute";
 
 function App() {
   const { state } = useContext(ContextPost);
@@ -21,8 +23,16 @@ function App() {
       element: <World />,
     },
     {
+      path: "/login",
+      element: <Login />,
+    },
+    {
       path: "/app",
-      element: <Worldapp />,
+      element: (
+        <ProtectedRoute>
+          <Worldapp />
+        </ProtectedRoute>
+      ),
       children: [
         {
           path: "",

@@ -11,6 +11,10 @@ export default function Reducer(state, action) {
       return { ...state, city: action.payload, loading: false };
     case "deleteCity":
       return { ...state, city: action.payload, loading: false };
+    case "login":
+      return { ...state, user: action.payload, isAuth: true };
+    case "logout":
+      return { ...state, user: null, isAuth: false };
   }
   // if (action.type === "city") {
   //   return action.payload;
