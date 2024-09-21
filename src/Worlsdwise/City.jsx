@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ContextPost } from "../Context";
@@ -17,7 +16,7 @@ const City = () => {
   const { getCity, state } = useContext(ContextPost);
   useEffect(() => {
     getCity(ID);
-  }, [ID]);
+  }, [ID, getCity]);
   const { cityName, emoji, date, notes } = state.currentCity;
 
   if (state.loading) return <h1>Loading...</h1>;

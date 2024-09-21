@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useCallback, useEffect, useReducer } from "react";
 import Reducer from "./Reducer";
 
 export const ContextPost = createContext();
@@ -24,9 +24,9 @@ export function PostContextProvider({ children }) {
       }
     };
     fetchCity();
-  }, []);
+  }, [state.currentCity.id]);
 
-  const getCity = async (id) => {
+  const getCity = useCallback(async function getCity(id) {
     dispatch({ type: "loading", payload: true });
     try {
       const response = await fetch(`http://localhost:4000/cities/${id}`, {
@@ -40,7 +40,7 @@ export function PostContextProvider({ children }) {
       console.log(error);
       dispatch({ type: "loading", payload: false });
     }
-  };
+  }, []);
 
   const addCity = async (city) => {
     dispatch({ type: "loading", payload: true });
